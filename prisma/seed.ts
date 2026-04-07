@@ -7,15 +7,19 @@ async function main() {
   console.log('🌱 Starting database seed...');
 
   // Create admin user
-  const hashedPassword = await bcrypt.hash('admin123', 10);
+  const hashedPassword = await bcrypt.hash('mazhar@41900', 10);
   const admin = await prisma.user.upsert({
-    where: { email: 'admin@alfursan.com' },
-    update: {},
+    where: { email: 'alfursanorig@gmail.com' },
+    update: { password: hashedPassword },
     create: {
-      email: 'admin@alfursan.com',
+      email: 'alfursanorig@gmail.com',
       password: hashedPassword,
     },
   });
+  // Also remove old admin if exists
+  await prisma.user.deleteMany({
+    where: { email: 'admin@alfursan.com' },
+  }).catch(() => {});
   console.log('✅ Admin user created:', admin.email);
 
   // Create services

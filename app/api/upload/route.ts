@@ -1,13 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile, mkdir } from 'fs/promises';
-import { join } from 'path';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { createClient } from '@supabase/supabase-js';
 import sharp from 'sharp';
+
+// Supabase storage client using service role key (server-side only)
+function getSupabaseAdmin() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!url || !key) {
+    throw new Error('Supabase environment variables not configured');
+  }
+
+  return createClient(url, key);
+}
 
 export async function POST(request: NextRequest) {
   try {
-    // Verify authentication
     const session = await getServerSession(authOptions);
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -30,8 +40,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate file size (5MB)
-    const maxSize = 5 * 1024 * 1024;
-    if (file.size > maxSize) {
+    if (file.size > 5 * 1024 * 1024) {
       return NextResponse.json(
         { error: 'File too large. Maximum size is 5MB.' },
         { status: 400 }
@@ -41,42 +50,47 @@ export async function POST(request: NextRequest) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Generate unique filename
     const timestamp = Date.now();
-    const sanitizedName = file.name.replace(/\s/g, '-').replace(/[^a-zA-Z0-9.-]/g, '');
-    const filename = `${timestamp}-${sanitizedName}`;
-    
-    // Create upload directory if it doesn't exist
-    const uploadDir = join(process.cwd(), 'public', 'uploads');
-    await mkdir(uploadDir, { recursive: true });
+    const sanitizedName = file.name
+      .replace(/\s/g, '-')
+      .replace(/[^a-zA-Z0-9.-]/g, '');
 
-    // Save original
-    const filepath = join(uploadDir, filename);
-    await writeFile(filepath, buffer);
-
-    // Generate optimized version
-    const optimizedFilename = `${timestamp}-optimized-${sanitizedName.replace(/\.[^.]+$/, '.webp')}`;
-    const optimizedPath = join(uploadDir, optimizedFilename);
-    
-    await sharp(buffer)
+    // Optimize image with sharp → WebP
+    const optimizedBuffer = await sharp(buffer)
       .resize(1200, 1200, { fit: 'inside', withoutEnlargement: true })
       .webp({ quality: 85 })
-      .toFile(optimizedPath);
+      .toBuffer();
 
-    // Generate thumbnail
-    const thumbnailFilename = `${timestamp}-thumb-${sanitizedName.replace(/\.[^.]+$/, '.webp')}`;
-    const thumbnailPath = join(uploadDir, thumbnailFilename);
-    
-    await sharp(buffer)
-      .resize(400, 400, { fit: 'cover' })
-      .webp({ quality: 80 })
-      .toFile(thumbnailPath);
+    const filename = `${timestamp}-${sanitizedName.replace(/\.[^.]+$/, '.webp')}`;
+
+    const supabase = getSupabaseAdmin();
+
+    // Upload to Supabase Storage bucket "uploads"
+    const { error: uploadError } = await supabase.storage
+      .from('uploads')
+      .upload(filename, optimizedBuffer, {
+        contentType: 'image/webp',
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error('Supabase upload error:', uploadError);
+      return NextResponse.json(
+        { error: 'Failed to upload file: ' + uploadError.message },
+        { status: 500 }
+      );
+    }
+
+    // Get public URL
+    const { data: { publicUrl } } = supabase.storage
+      .from('uploads')
+      .getPublicUrl(filename);
 
     return NextResponse.json({
       success: true,
-      url: `/uploads/${filename}`,
-      optimizedUrl: `/uploads/${optimizedFilename}`,
-      thumbnailUrl: `/uploads/${thumbnailFilename}`,
+      url: publicUrl,
+      optimizedUrl: publicUrl,
+      thumbnailUrl: publicUrl,
     });
   } catch (error) {
     console.error('Error uploading file:', error);
