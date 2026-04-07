@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
@@ -12,7 +13,8 @@ interface TeamMember {
   imageUrl: string | null;
 }
 
-export default function EditTeamMemberPage({ params }: { params: { id: string } }) {
+export default function EditTeamMemberPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -21,11 +23,11 @@ export default function EditTeamMemberPage({ params }: { params: { id: string } 
 
   useEffect(() => {
     fetchTeamMember();
-  }, [params.id]);
+  }, [id]);
 
   const fetchTeamMember = async () => {
     try {
-      const response = await fetch(`/api/admin/team?id=${params.id}`);
+      const response = await fetch(`/api/admin/team?id=${id}`);
       if (!response.ok) throw new Error('Failed to fetch team member');
       
       const data = await response.json();
@@ -54,7 +56,7 @@ export default function EditTeamMemberPage({ params }: { params: { id: string } 
       const response = await fetch('/api/admin/team', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: params.id, name: formData.name, imageUrl: formData.imageUrl }),
+        body: JSON.stringify({ id, name: formData.name, imageUrl: formData.imageUrl }),
       });
 
       if (!response.ok) {

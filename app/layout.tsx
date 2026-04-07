@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import PublicLayoutWrapper from "@/components/public/PublicLayoutWrapper";
 import ParticleBackground from "@/components/shared/ParticleBackground";
+import SessionProviderWrapper from "@/components/shared/SessionProviderWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,8 +39,10 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col antialiased" suppressHydrationWarning>
-        <ParticleBackground />
-        <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
+        <SessionProviderWrapper>
+          <ParticleBackground />
+          <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
+        </SessionProviderWrapper>
       </body>
     </html>
   );

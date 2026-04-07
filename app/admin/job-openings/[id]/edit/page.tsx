@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
@@ -12,7 +13,8 @@ interface JobOpening {
   active: boolean;
 }
 
-export default function EditJobOpeningPage({ params }: { params: { id: string } }) {
+export default function EditJobOpeningPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -21,11 +23,11 @@ export default function EditJobOpeningPage({ params }: { params: { id: string } 
 
   useEffect(() => {
     fetchJobOpening();
-  }, [params.id]);
+  }, [id]);
 
   const fetchJobOpening = async () => {
     try {
-      const response = await fetch(`/api/admin/job-openings?id=${params.id}`);
+      const response = await fetch(`/api/admin/job-openings?id=${id}`);
       if (!response.ok) throw new Error('Failed to fetch job opening');
       
       const data = await response.json();
@@ -49,7 +51,7 @@ export default function EditJobOpeningPage({ params }: { params: { id: string } 
       const response = await fetch('/api/admin/job-openings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: params.id, ...updateData }),
+        body: JSON.stringify({ id, ...updateData }),
       });
 
       if (!response.ok) {

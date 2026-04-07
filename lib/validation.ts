@@ -34,7 +34,7 @@ export type BlogPostFormData = z.infer<typeof blogPostSchema>;
 export const projectSchema = z.object({
   title: z.string().min(3, 'Title must be at least 3 characters'),
   description: z.string().min(20, 'Description must be at least 20 characters'),
-  imageUrl: z.string().url('Valid image URL required'),
+  imageUrl: z.string().min(1, 'Image is required'),
 });
 
 export type ProjectFormData = z.infer<typeof projectSchema>;
@@ -71,7 +71,7 @@ export type ServiceFormData = z.infer<typeof serviceSchema>;
  */
 export const teamMemberSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  imageUrl: z.string().url('Valid image URL required').optional(),
+  imageUrl: z.string().nullable().optional().transform(v => (!v || v === '') ? null : v),
 });
 
 export type TeamMemberFormData = z.infer<typeof teamMemberSchema>;

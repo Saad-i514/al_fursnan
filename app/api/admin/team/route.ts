@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 const teamMemberSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
-  imageUrl: z.string().url().nullable().optional(),
+  imageUrl: z.string().nullable().optional().transform(v => (!v || v === '') ? null : v),
 });
 
 export async function GET(request: NextRequest) {

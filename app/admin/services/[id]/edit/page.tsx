@@ -1,5 +1,6 @@
 'use client';
 
+import React from 'react';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
@@ -11,7 +12,8 @@ interface Service {
   displayOrder: number;
 }
 
-export default function EditServicePage({ params }: { params: { id: string } }) {
+export default function EditServicePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = React.use(params);
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -20,11 +22,11 @@ export default function EditServicePage({ params }: { params: { id: string } }) 
 
   useEffect(() => {
     fetchService();
-  }, [params.id]);
+  }, [id]);
 
   const fetchService = async () => {
     try {
-      const response = await fetch(`/api/admin/services?id=${params.id}`);
+      const response = await fetch(`/api/admin/services?id=${id}`);
       if (!response.ok) throw new Error('Failed to fetch service');
       
       const data = await response.json();
@@ -48,7 +50,7 @@ export default function EditServicePage({ params }: { params: { id: string } }) 
       const response = await fetch('/api/admin/services', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: params.id, ...updateData }),
+        body: JSON.stringify({ id, ...updateData }),
       });
 
       if (!response.ok) {
