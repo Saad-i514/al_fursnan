@@ -17,6 +17,13 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "AL FURSAN Technologies - End-to-End Technology Solutions",
   description: "AL FURSAN Technologies provides AI solutions, SAAS products, website development, mobile applications, and chatbots. Get your free consultation today.",
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+    ],
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({
