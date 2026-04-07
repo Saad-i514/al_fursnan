@@ -93,41 +93,31 @@ export default async function AboutPage() {
         {/* Team */}
         {(ceo || founder) && (
           <AnimatedSection>
-            <div className="mb-20">
-              <h2 className="text-3xl md:text-4xl font-bold mb-12 text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <div className="mb-10 sm:mb-20">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-8 sm:mb-12 text-center bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Our Leadership
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-4xl mx-auto">
                 {ceo && (
-                  <div className="bg-card border border-border rounded-lg p-8 text-center hover:border-primary/50 transition-all duration-300">
+                  <div className="bg-card border border-border rounded-lg p-6 sm:p-8 text-center hover:border-primary/50 transition-all duration-300">
                     {ceo.imageUrl && (
-                      <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
-                        <Image
-                          src={ceo.imageUrl}
-                          alt={ceo.name}
-                          fill
-                          className="object-cover"
-                        />
+                      <div className="relative w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-4 rounded-full overflow-hidden">
+                        <Image src={ceo.imageUrl} alt={ceo.name} fill className="object-cover" />
                       </div>
                     )}
-                    <h3 className="text-2xl font-bold text-foreground mb-2">{ceo.name}</h3>
-                    <p className="text-primary font-semibold">Chief Executive Officer</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{ceo.name}</h3>
+                    <p className="text-primary font-semibold text-sm sm:text-base">Chief Executive Officer</p>
                   </div>
                 )}
                 {founder && (
-                  <div className="bg-card border border-border rounded-lg p-8 text-center hover:border-secondary/50 transition-all duration-300">
+                  <div className="bg-card border border-border rounded-lg p-6 sm:p-8 text-center hover:border-secondary/50 transition-all duration-300">
                     {founder.imageUrl && (
-                      <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden">
-                        <Image
-                          src={founder.imageUrl}
-                          alt={founder.name}
-                          fill
-                          className="object-cover"
-                        />
+                      <div className="relative w-24 h-24 sm:w-32 sm:h-32 mx-auto mb-4 rounded-full overflow-hidden">
+                        <Image src={founder.imageUrl} alt={founder.name} fill className="object-cover" />
                       </div>
                     )}
-                    <h3 className="text-2xl font-bold text-foreground mb-2">{founder.name}</h3>
-                    <p className="text-secondary font-semibold">Founder</p>
+                    <h3 className="text-xl sm:text-2xl font-bold text-foreground mb-2">{founder.name}</h3>
+                    <p className="text-secondary font-semibold text-sm sm:text-base">Founder</p>
                   </div>
                 )}
               </div>
