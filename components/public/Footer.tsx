@@ -68,12 +68,12 @@ export default function Footer() {
               <li>
                 <a
                   href="mailto:alfursanorig@gmail.com"
-                  className="text-sm text-foreground/70 hover:text-primary transition-colors flex items-center gap-2 font-light"
+                  className="text-sm text-foreground/70 hover:text-primary transition-colors flex items-center gap-2 font-light break-all"
                 >
                   <svg className="h-4 w-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                   </svg>
-                  alfursanorig@gmail.com
+                  <span className="break-all">alfursanorig@gmail.com</span>
                 </a>
               </li>
               <li>
