@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import { useState } from 'react';
 
 interface ProjectCardProps {
   id: string;
@@ -12,6 +13,11 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ title, description, imageUrl, onClick }: ProjectCardProps) {
+  const [imgError, setImgError] = useState(false);
+
+  // Check if it's a valid absolute URL or a local path
+  const isValidSrc = imageUrl && (imageUrl.startsWith('http') || imageUrl.startsWith('/'));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -21,13 +27,20 @@ export default function ProjectCard({ title, description, imageUrl, onClick }: P
       onClick={onClick}
       className="group relative bg-card border border-border rounded-xl overflow-hidden cursor-pointer hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 active:scale-[0.98]"
     >
-      <div className="relative h-40 sm:h-48 w-full overflow-hidden">
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-300 group-hover:scale-110"
-        />
+      <div className="relative h-40 sm:h-48 w-full overflow-hidden bg-muted">
+        {isValidSrc && !imgError ? (
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-110"
+            onError={() => setImgError(true)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-secondary/10">
+            <span className="text-4xl">🖼️</span>
+          </div>
+        )}
       </div>
       <div className="p-4 sm:p-6">
         <h3 className="text-base sm:text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">

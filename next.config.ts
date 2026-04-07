@@ -7,10 +7,14 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
+    unoptimized: process.env.NODE_ENV === 'development',
   },
-  // Enable experimental features for better performance
   experimental: {
     optimizePackageImports: ['framer-motion'],
   },

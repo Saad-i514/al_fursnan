@@ -62,13 +62,26 @@ async function main() {
     },
   ];
 
+  // Clean duplicate services first, keep only one per title
+  const allServices = await prisma.service.findMany({ orderBy: { createdAt: 'asc' } });
+  const seen = new Set<string>();
+  for (const s of allServices) {
+    if (seen.has(s.title)) {
+      await prisma.service.delete({ where: { id: s.id } });
+    } else {
+      seen.add(s.title);
+    }
+  }
+
+  // Upsert services using title-based lookup
   for (const service of services) {
-    const created = await prisma.service.upsert({
-      where: { id: service.title.toLowerCase().replace(/\s+/g, '-') },
-      update: service,
-      create: service,
-    });
-    console.log('✅ Service created:', created.title);
+    const existing = await prisma.service.findFirst({ where: { title: service.title } });
+    if (existing) {
+      await prisma.service.update({ where: { id: existing.id }, data: service });
+    } else {
+      await prisma.service.create({ data: service });
+    }
+    console.log('✅ Service upserted:', service.title);
   }
 
   // Create team members
