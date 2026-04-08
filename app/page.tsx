@@ -103,7 +103,7 @@ export default function Home() {
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 max-w-5xl mx-auto text-center px-2">
+        <div className="relative z-10 max-w-5xl mx-auto text-center px-2 w-full">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -134,7 +134,7 @@ export default function Home() {
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
