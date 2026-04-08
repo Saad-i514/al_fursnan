@@ -4,6 +4,7 @@ import "./globals.css";
 import PublicLayoutWrapper from "@/components/public/PublicLayoutWrapper";
 import ParticleBackground from "@/components/shared/ParticleBackground";
 import SessionProviderWrapper from "@/components/shared/SessionProviderWrapper";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,6 +48,7 @@ export default function RootLayout({
           <ParticleBackground />
           <PublicLayoutWrapper>{children}</PublicLayoutWrapper>
         </SessionProviderWrapper>
+        <Analytics />
       </body>
     </html>
   );
