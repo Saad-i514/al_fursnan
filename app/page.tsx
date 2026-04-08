@@ -73,41 +73,28 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 overflow-hidden">
+      <section className="relative flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 overflow-hidden w-full">
         {/* Animated gradient background */}
         <div className="absolute inset-0 overflow-hidden">
           <motion.div
             className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-primary/20 via-secondary/20 to-transparent rounded-full blur-3xl"
-            animate={{
-              scale: [1, 1.2, 1],
-              rotate: [0, 90, 0],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
+            animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           />
           <motion.div
             className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-gradient-to-tl from-accent/20 via-secondary/20 to-transparent rounded-full blur-3xl"
-            animate={{
-              scale: [1.2, 1, 1.2],
-              rotate: [90, 0, 90],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: 'linear',
-            }}
+            animate={{ scale: [1.2, 1, 1.2], rotate: [90, 0, 90] }}
+            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
           />
         </div>
 
         {/* Hero content */}
-        <div className="relative z-10 max-w-5xl mx-auto text-center px-2 w-full">
+        <div className="relative z-10 w-full max-w-5xl mx-auto flex flex-col items-center text-center px-4">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="w-full"
           >
             <h1 className="text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 sm:mb-6 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent leading-[1.1] tracking-tight">
               AL FURSAN Technologies
@@ -124,7 +111,7 @@ export default function Home() {
           </motion.p>
 
           <motion.p
-            className="text-sm sm:text-base md:text-lg lg:text-xl text-foreground/80 mb-8 sm:mb-12 max-w-3xl mx-auto leading-relaxed font-light"
+            className="text-sm sm:text-base md:text-lg lg:text-xl text-foreground/80 mb-8 sm:mb-12 max-w-3xl leading-relaxed font-light"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
@@ -134,7 +121,7 @@ export default function Home() {
           </motion.p>
 
           <motion.div
-            className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center w-full"
+            className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center justify-center"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
