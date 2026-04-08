@@ -20,9 +20,9 @@ export default function PublicLayoutWrapper({
   }
 
   return (
-    <div style={{ position: 'relative', zIndex: 2, display: 'contents' }}>
+    <div className="relative z-10 flex flex-col min-h-screen w-full">
       <Header />
-      <main className="flex-1">{children}</main>
+      <main className="flex-1 w-full">{children}</main>
       <Footer />
       <WhatsAppButton phoneNumber="+923338705805" />
     </div>
